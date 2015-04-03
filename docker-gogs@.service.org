@@ -1,0 +1,23 @@
+# systemd unit file for gogs docker service
+# Andreas Linz - klingt.net@gmail.com
+# https://github.com/klingtdotnet/docker-gogs
+#
+# Note:
+#   - tasks that are prefixed with an `-` are allowed to fail
+
+[Unit]
+Description=gogs docker
+Requires=docker.service
+After=docker.service
+
+[Service]
+User=%I
+Restart=on-failure
+RestartSec=10
+ExecStartPre=-/usr/bin/docker rm -f docker-gogs
+ExecStart=/path/to/run.sh
+ExecStop=/usr/bin/docker stop docker-gogs
+ExecStop=-/usr/bin/docker rm docker-gogs
+
+[Install]
+WantedBy=multi-user.target
