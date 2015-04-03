@@ -7,7 +7,7 @@ RUN apt-get update &&\
 # create gogs user
 #
 # note: the gogs user must have a login shell, setting it to /usr/bin/nologin or /bin/false will make you unable to push over ssh!
-RUN useradd --create-home --comment 'Gogs' --shell /usr/sh gogs
+RUN useradd --create-home --comment 'Gogs' --shell /bin/sh gogs
 
 # get the latest linux build (sqlite is not supported in the `go get` version)
 # note that `unzip` can't extract zip content from a pipe
@@ -22,10 +22,12 @@ RUN su -s /bin/bash -c "mkdir -p ~/share/db &&\
     mkdir ~/share/repos &&\
     mkdir ~/share/conf &&\
     mkdir ~/share/ssh  &&\
+    mkdir ~/share/logs &&\
     ln -s ~/share/db ~/db &&\
     ln -s ~/share/repos ~/gogs-repositories &&\
     mkdir ~/bin/custom && ln -s ~/share/conf ~/bin/custom/conf &&\
-    ln -s ~/share/ssh ~/.ssh" gogs &&\
+    ln -s ~/share/ssh ~/.ssh &&\
+    ln -s ~/share/logs ~/logs" gogs &&\
     invoke-rc.d ssh restart
 
 ADD start.sh /home/gogs/
