@@ -1,0 +1,4 @@
+share/ssh/*
+share/db/*
+share/repos/*
+share/conf/*.ini

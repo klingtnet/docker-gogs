@@ -1,0 +1,44 @@
+# https://github.com/gogits/gogs/blob/master/conf/app.ini
+RUN_USER = gogs
+RUN_MODE = prod
+
+[repository]
+ROOT = /home/gogs/gogs-repositories
+
+[server]
+PROTOCOL = http
+DOMAIN = localhost
+HTTP_PORT = 8080
+SSH_PORT = 22
+ENABLE_GZIP = true
+ROOT_URL = http://localhost:8080/
+
+[database]
+DB_TYPE = sqlite3
+PATH = /home/gogs/db/gogs.db
+HOST = 127.0.0.1:3306
+NAME = gogs
+USER = root
+PASSWD = 
+SSL_MODE = disable
+
+[service]
+DISABLE_REGISTRATION = true
+SHOW_REGISTRATION_BUTTON = false
+# REQUIRE_SIGNIN_VIEW = true
+ENABLE_CACHE_AVATAR = true
+
+[oauth]
+ENABLED = false
+
+[session]
+PROVIDER = file
+
+[log]
+MODE = file
+LEVEL = Info
+
+[security]
+INSTALL_LOCK = true
+SECRET_KEY = QC9SfksyIJEbH5Z
+
