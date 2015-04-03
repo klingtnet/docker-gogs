@@ -1,3 +1,4 @@
+docker-gogs@.service
 share/ssh/*
 share/db/*
 share/repos/*
