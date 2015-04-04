@@ -1,4 +1,4 @@
-FROM golang
+FROM golang:latest
 
 # install non-go dependencies
 RUN apt-get update &&\
