@@ -6,6 +6,8 @@
 docker build -t gogs .
 ```
 
+- use the `--rm` to let docker delete all intermediate images on a successful build
+
 Please be patient, this could some minutes.
 
 ## run script
