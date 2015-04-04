@@ -12,6 +12,8 @@ Please be patient, this could some minutes.
 
 **WARNING**: When you run gogs for the first time, it will serve the installation form, where you can setup an admin account, on the web interface. Make sure that this is not accessible from the outside! After you made the initial setup everything is save to serve on the web. Note that you **can not** use **admin** for the administrator account name, [see](http://gogs.io/docs/intro/troubleshooting.html#form-validation).
 
+- use an ssh tunnel to access the container for the initial setup: `ssh -L LOCAL_PORT:domain:REMOTE_PORT domain`
+
 Because docker can't mount relative paths you have to call the run script with an absolute path, or more conviently: `$PWD/run.sh`.
 
 ## configuration

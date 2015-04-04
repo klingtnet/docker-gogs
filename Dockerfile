@@ -2,7 +2,8 @@ FROM golang
 
 # install non-go dependencies
 RUN apt-get update &&\
-    apt-get -y install openssh-server git sqlite3 unzip
+    apt-get -y install openssh-server git sqlite3 unzip &&\
+    rm -rf /var/lib/apt/lists/*
 
 # create gogs user
 #
@@ -11,11 +12,15 @@ RUN useradd --create-home --comment 'Gogs' --shell /bin/sh gogs
 
 # get the latest linux build (sqlite is not supported in the `go get` version)
 # note that `unzip` can't extract zip content from a pipe
+ENV GOGS_ZIP /tmp/gogs-latest.zip
+ENV GOGS_HOME /home/gogs
+
 RUN curl -L "https://github.com/$(curl -Ls 'https://github.com/gogits/gogs/releases/latest' | \
-    sed --silent 's/.*href="\(.*linux_amd64.zip[^"]*\).*/\1/p')" --output /tmp/gogs-latest.zip &&\
-    unzip /tmp/gogs-latest.zip -d /tmp &&\
-    mv /tmp/gogs /home/gogs/bin &&\
-    chown -R gogs:gogs /home/gogs/bin
+    sed --silent 's/.*href="\(.*linux_amd64.zip[^"]*\).*/\1/p')" --output ${GOGS_ZIP} &&\
+    unzip ${GOGS_ZIP} -d /tmp &&\
+    rm ${GOGS_ZIP} &&\
+    mv /tmp/gogs ${GOGS_HOME}/bin &&\
+    chown -R gogs:gogs ${GOGS_HOME}/bin
 
 ADD sshd_config /etc/ssh/
 RUN su -s /bin/bash -c "mkdir -p ~/share/db &&\
@@ -30,12 +35,11 @@ RUN su -s /bin/bash -c "mkdir -p ~/share/db &&\
     ln -s ~/share/logs ~/logs" gogs &&\
     invoke-rc.d ssh restart
 
-ADD start.sh /home/gogs/
+ADD start.sh ${GOGS_HOME}/
 
-VOLUME /home/gogs/share
+VOLUME ${GOGS_HOME}/share
 EXPOSE 22 3000
 
 ENV USER gogs
-ENV HOME /home/gogs
 
-WORKDIR /home/gogs
+WORKDIR ${GOGS_HOME}
