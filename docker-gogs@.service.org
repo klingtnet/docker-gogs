@@ -14,10 +14,10 @@ After=docker.service
 User=%I
 Restart=on-failure
 RestartSec=10
-ExecStartPre=-/usr/bin/docker rm -f docker-gogs
+ExecStartPre=-/usr/bin/docker rm -f gogs
 ExecStart=/path/to/run.sh
-ExecStop=/usr/bin/docker stop docker-gogs
-ExecStop=-/usr/bin/docker rm docker-gogs
+ExecStop=/usr/bin/docker stop gogs
+ExecStop=-/usr/bin/docker rm gogs
 
 [Install]
 WantedBy=multi-user.target
