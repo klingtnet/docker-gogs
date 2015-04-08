@@ -27,19 +27,19 @@ RUN curl -L "https://github.com/$(curl -Ls 'https://github.com/gogits/gogs/relea
     chown -R gogs:gogs ${GOGS_HOME}/bin
 
 ADD sshd_config /etc/ssh/
-RUN su -s /bin/bash -c "mkdir -p ~/share/db &&\
-    mkdir ~/share/repos &&\
-    mkdir ~/share/conf &&\
-    mkdir ~/share/ssh  &&\
-    mkdir ~/share/logs &&\
-    ln -s ~/share/db ~/db &&\
-    ln -s ~/share/repos ~/gogs-repositories &&\
-    mkdir ~/bin/custom && ln -s ~/share/conf ~/bin/custom/conf &&\
-    ln -s ~/share/ssh ~/.ssh &&\
-    ln -s ~/share/logs ~/logs" gogs &&\
-    invoke-rc.d ssh restart
 
-ADD start.sh ${GOGS_HOME}/
+# create directory structure as gogs user (no need to chown)
+RUN su -s /bin/bash -c "mkdir -p ~/share &&\
+    mkdir ~/share/{repos,conf,ssh,logs,user-templates} &&\
+    mkdir ~/bin/custom && ln -s ~/share/conf ~/bin/custom/conf &&\
+    ln -s ~/share/repos ~/gogs-repositories &&\
+    ln -s ~/share/db ~/db &&\
+    ln -s ~/share/ssh ~/.ssh &&\
+    ln -s ~/share/logs ~/logs &&\
+    ln -s ~/share/user-templates ~/user-templates" gogs
+
+ADD start.sh ${GOGS_HOME}/start.sh
+RUN chown gogs:gogs ${GOGS_HOME}/start.sh
 
 VOLUME ${GOGS_HOME}/share
 EXPOSE 22 3000
