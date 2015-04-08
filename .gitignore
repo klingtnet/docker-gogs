@@ -4,3 +4,4 @@ share/db/*
 share/repos/*
 share/conf/*.ini
 share/logs/*
+share/user-templates/*
