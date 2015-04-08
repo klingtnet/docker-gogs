@@ -2,7 +2,11 @@ FROM golang:latest
 
 # install non-go dependencies
 RUN apt-get update &&\
-    apt-get -y install openssh-server git sqlite3 unzip &&\
+    apt-get -y install\
+        openssh-server\
+        git\
+        sqlite3\
+        unzip &&\
     rm -rf /var/lib/apt/lists/*
 
 # create gogs user
