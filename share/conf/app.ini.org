@@ -1,4 +1,3 @@
-# https://github.com/gogits/gogs/blob/master/conf/app.ini
 RUN_USER = gogs
 
 [repository]
@@ -7,17 +6,17 @@ ROOT = /home/gogs/gogs-repositories
 [server]
 PROTOCOL = http
 DOMAIN = localhost
-HTTP_PORT = 8080
+HTTP_PORT = 3000
 SSH_PORT = 22
 ENABLE_GZIP = true
-ROOT_URL = http://localhost:8080/
+ROOT_URL = http://localhost:3000/
+# the STATIC_ROOT_PATH points to the directory which *contains* the `templates` and `public` (assets) directories!
+# STATIC_ROOT_PATH = /home/gogs/user-templates/
 
 [database]
 DB_TYPE = sqlite3
 PATH = /home/gogs/db/gogs.db
-HOST = 127.0.0.1:3306
 NAME = gogs
-SSL_MODE = disable
 
 [service]
 DISABLE_REGISTRATION = true
