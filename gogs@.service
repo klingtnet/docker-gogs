@@ -1,0 +1,17 @@
+[Unit]
+Description=gogs - go git service
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+EnvironmentFile=/etc/sysconfig/gogs
+ExecStartPre=-/usr/bin/docker rm -f gogs
+ExecStart=/usr/bin/docker run --name gogs \
+    -p ${GOGS_HTTP}:3000 \
+    -p ${GOGS_SSH}:22 \
+    --volumes-from gogs-data klingtdotnet/gogs
+ExecStop=/usr/bin/docker stop gogs
+
+[Install]
+WantedBy=multi-user.target
