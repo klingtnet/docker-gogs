@@ -1,0 +1,3 @@
+# environment variables for prosody systemd service
+GOGS_HTTP=9080
+GOGS_SSH=9022
