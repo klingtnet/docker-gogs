@@ -1,4 +1,5 @@
 FROM golang:latest
+MAINTAINER Andreas Linz <klingt.net@gmail.com>
 
 # install non-go dependencies
 RUN apt-get update &&\
@@ -6,46 +7,37 @@ RUN apt-get update &&\
         openssh-server\
         git\
         sqlite3\
+        bsdtar\
         unzip &&\
     rm -rf /var/lib/apt/lists/*
 
 # create gogs user
-#
 # note: the gogs user must have a login shell, setting it to /usr/bin/nologin or /bin/false will make you unable to push over ssh!
-RUN useradd --create-home --comment 'Gogs' --shell $(which git-shell) gogs
+RUN useradd --system --create-home --comment 'gogs - go git service' --shell $(which git-shell) gogs
 
 # get the latest linux build (sqlite is not supported in the `go get` version)
-# note that `unzip` can't extract zip content from a pipe
-ENV GOGS_ZIP /tmp/gogs-latest.zip
-ENV GOGS_HOME /home/gogs
+RUN curl -Ls 'https://github.com/gogits/gogs/releases/download/v0.6.5/linux_amd64.zip' | bsdtar -C /opt -xzf - &&\
+    mkdir /opt/gogs/custom &&\
+    mkdir /opt/gogs/log &&\
+    find /opt/gogs -type d -exec chmod 755 {} \; &&\
+    chmod u+x /opt/gogs/gogs
 
-RUN curl -L "https://github.com/$(curl -Ls 'https://github.com/gogits/gogs/releases/latest' | \
-    sed --silent 's/.*href="\(.*linux_amd64.zip[^"]*\).*/\1/p')" --output ${GOGS_ZIP} &&\
-    unzip ${GOGS_ZIP} -d /tmp &&\
-    rm ${GOGS_ZIP} &&\
-    mv /tmp/gogs ${GOGS_HOME}/bin &&\
-    chown -R gogs:gogs ${GOGS_HOME}/bin
+# HTTP
+EXPOSE 3000
+# SSH
+EXPOSE 22
 
-ADD sshd_config /etc/ssh/
-
-# create directory structure as gogs user (no need to chown)
-RUN su -s /bin/bash -c "mkdir -p ~/share &&\
-    mkdir ~/share/{repos,conf,ssh,logs,user-templates} &&\
-    mkdir ~/bin/custom && ln -s ~/share/conf ~/bin/custom/conf &&\
-    ln -s ~/share/repos ~/gogs-repositories &&\
-    ln -s ~/share/db ~/db &&\
-    ln -s ~/share/ssh ~/.ssh &&\
-    ln -s ~/share/logs ~/logs &&\
-    ln -s ~/share/user-templates ~/user-templates" gogs
-
-ADD start.sh ${GOGS_HOME}/start.sh
-RUN chown gogs:gogs ${GOGS_HOME}/start.sh
-
-VOLUME ${GOGS_HOME}/share
-EXPOSE 22 3000
-
+# gogs reads USER or USERNAME to determine the run user
 ENV USER gogs
+USER gogs
 
-WORKDIR ${GOGS_HOME}
+# shell expansion does not work, g.e. like /opt/gogs/{custom,log}
+# create the mountable folders before you declare them with the VOLUME statement, otherwise they will be created automatically as root user
+VOLUME /home/gogs
+VOLUME /etc/ssh
+VOLUME /opt/gogs/custom
+VOLUME /opt/gogs/log
 
-CMD ${GOGS_HOME}/start.sh
+WORKDIR /opt/gogs
+
+CMD /opt/gogs/gogs web
