@@ -1,28 +1,35 @@
-# [gogs](http://gogs.io) as a docker service
+# [gogs](http://gogs.io) as a Docker Service
 
-## build the docker image
+## Create the Data Container
 
 ```sh
-docker build -t gogs .
+docker create --name gogs-data --volume /home/gogs --volume /etc/ssh --volume /opt/gogs/custom --volume /opt/gogs/log klingtdotnet/gogs
 ```
 
-- use the `--rm` to let docker delete all intermediate images on a successful build
+## First Run
 
-Please be patient, this could some minutes.
+```sh
+docker run --rm --volumes-from gogs-data -p 8080:3000 -it klingtdotnet/gogs
+```
 
-## run script
+- set the *run user* to `gogs`
+- set the location of your SQlite database to something below `/home/gogs` becaust this is mounted from the data container
 
 **WARNING**: When you run gogs for the first time, it will serve the installation form, where you can setup an admin account, on the web interface. Make sure that this is not accessible from the outside! After you made the initial setup everything is save to serve on the web. Note that you **can not** use **admin** for the administrator account name, [see](http://gogs.io/docs/intro/troubleshooting.html#form-validation).
 
 - use an ssh tunnel to access the container for the initial setup: `ssh -L LOCAL_PORT:domain:REMOTE_PORT domain`
 
-Because docker can't mount relative paths you have to call the run script with an absolute path, or more conviently: `$PWD/run.sh`.
+- I would recommend to check the configuration of `sshd` (disable X11 forwarding, root login and password authentification) and [gogs](http://gogs.io/docs/advanced/configuration_cheat_sheet.html) afterwards:
 
-## configuration
+```sh
+docker run --rm --volumes-from gogs-data -it klingtdotnet/vim /bin/bash
+```
 
-- follows ...
+## Run as SystemD Service
 
-### https nginx example config
+ToDo ...
+
+### HTTP(s) nginx Example Config
 
 - it is not possible (at least I don't know how) for an ssh server to listen on a suburl, like `some.domain/git`, so I decided to use sub domain instead
 
