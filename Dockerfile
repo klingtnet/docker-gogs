@@ -9,8 +9,7 @@ RUN apt-get update &&\
         git\
         sqlite3\
         bsdtar\
-        unzip \
-        sudo &&\
+        unzip &&\
     rm -rf /var/lib/apt/lists/*
 
 RUN echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen &&\
@@ -52,4 +51,4 @@ ENV GOGS_TIMEZONE "Europe/Berlin"
 
 CMD echo ${GOGS_TIMEZONE} > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata &&\
     service ssh start &&\
-    sudo -u gogs /opt/gogs/gogs web
+    su -s /bin/sh -c '/opt/gogs/gogs web' gogs
