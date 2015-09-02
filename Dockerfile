@@ -41,4 +41,4 @@ VOLUME /opt/gogs/log
 
 WORKDIR /opt/gogs
 
-CMD /opt/gogs/gogs web
+CMD $(which sshd) && /opt/gogs/gogs web
