@@ -1,6 +1,10 @@
 FROM golang:latest
 MAINTAINER Andreas Linz <klingt.net@gmail.com>
 
+RUN echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen &&\
+    echo 'LANG="en_US.UTF-8"' > /etc/default/locale &&\
+    locale-gen 'en_US.UTF-8'
+
 # install non-go dependencies
 RUN apt-get update &&\
     apt-get -y install\
@@ -41,4 +45,8 @@ VOLUME /opt/gogs/log
 
 WORKDIR /opt/gogs
 
-CMD service ssh start && sudo -u gogs /opt/gogs/gogs web
+ENV GOGS_TIMEZONE "Europe/Berlin"
+
+CMD echo ${GOGS_TIMEZONE} > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata &&\
+    service ssh start &&\
+    sudo -u gogs /opt/gogs/gogs web
