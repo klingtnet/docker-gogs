@@ -8,7 +8,8 @@ RUN apt-get update &&\
         git\
         sqlite3\
         bsdtar\
-        unzip &&\
+        unzip \
+        sudo &&\
     rm -rf /var/lib/apt/lists/*
 
 # create gogs user
@@ -30,7 +31,6 @@ EXPOSE 22
 
 # gogs reads USER or USERNAME to determine the run user
 ENV USER gogs
-USER gogs
 
 # shell expansion does not work, g.e. like /opt/gogs/{custom,log}
 # create the mountable folders before you declare them with the VOLUME statement, otherwise they will be created automatically as root user
@@ -41,4 +41,4 @@ VOLUME /opt/gogs/log
 
 WORKDIR /opt/gogs
 
-CMD $(which sshd) && /opt/gogs/gogs web
+CMD service ssh start && sudo -u gogs /opt/gogs/gogs web
