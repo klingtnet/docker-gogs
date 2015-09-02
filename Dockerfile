@@ -1,13 +1,10 @@
 FROM golang:latest
 MAINTAINER Andreas Linz <klingt.net@gmail.com>
 
-RUN echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen &&\
-    echo 'LANG="en_US.UTF-8"' > /etc/default/locale &&\
-    locale-gen 'en_US.UTF-8'
-
 # install non-go dependencies
 RUN apt-get update &&\
     apt-get -y install\
+        locales\
         openssh-server\
         git\
         sqlite3\
@@ -15,6 +12,12 @@ RUN apt-get update &&\
         unzip \
         sudo &&\
     rm -rf /var/lib/apt/lists/*
+
+RUN echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen &&\
+    dpkg-reconfigure locales -f noninteractive &&\
+    update-locale LANG='en_US.UTF-8'
+
+ENV LANG 'en_US.UTF-8'
 
 # create gogs user
 # note: the gogs user must have a login shell, setting it to /usr/bin/nologin or /bin/false will make you unable to push over ssh!
