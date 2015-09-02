@@ -20,7 +20,7 @@ ENV LANG 'en_US.UTF-8'
 
 # create gogs user
 # note: the gogs user must have a login shell, setting it to /usr/bin/nologin or /bin/false will make you unable to push over ssh!
-RUN useradd --system --create-home --comment 'gogs - go git service' --shell $(which git-shell) gogs &&\
+RUN useradd --system --create-home --comment 'gogs - go git service' --shell /bin/bash gogs &&\
     passwd -d gogs
 
 # get the latest linux build (sqlite is not supported in the `go get` version)
