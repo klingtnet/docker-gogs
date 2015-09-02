@@ -20,6 +20,7 @@ RUN curl -Ls 'https://github.com/gogits/gogs/releases/download/v0.6.5/linux_amd6
     mkdir /opt/gogs/custom &&\
     mkdir /opt/gogs/log &&\
     find /opt/gogs -type d -exec chmod 755 {} \; &&\
+    chown -R gogs:gogs /opt/gogs &&\
     chmod u+x /opt/gogs/gogs
 
 # HTTP
