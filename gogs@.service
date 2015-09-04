@@ -9,7 +9,7 @@ EnvironmentFile=/etc/sysconfig/gogs
 ExecStartPre=-/usr/bin/docker rm -f gogs
 ExecStart=/usr/bin/docker run --name gogs \
     -p ${GOGS_IP}:${GOGS_HTTP}:3000 \
-    -p ${GOGS_IP}:${GOGS_SSH}:22 \
+    -p ${GOGS_SSH_IP}:${GOGS_SSH}:22 \
     --volumes-from gogs-data klingtdotnet/gogs
 ExecStop=/usr/bin/docker stop gogs
 
