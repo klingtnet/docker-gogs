@@ -17,7 +17,7 @@ RUN echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen &&\
     update-locale LANG='en_US.UTF-8'
 
 ENV LANG 'en_US.UTF-8'
-ENV GOGS_VERSION '0.6.9'
+ENV GOGS_VERSION 0.6.9
 
 # create gogs user
 # note: the gogs user must have a login shell, setting it to /usr/bin/nologin or /bin/false will make you unable to push over ssh!
@@ -25,9 +25,9 @@ RUN useradd --system --create-home --comment 'gogs - go git service' --shell /bi
     passwd -d gogs
 
 # get the latest linux build (sqlite is not supported in the `go get` version)
-RUN curl -Ls 'https://github.com/gogits/gogs/releases/download/v${GOGS_VERSION}/linux_amd64.zip' | bsdtar -C /opt -xzf - &&\
-    mkdir /opt/gogs/custom &&\
-    mkdir /opt/gogs/log &&\
+RUN curl -Ls "https://github.com/gogits/gogs/releases/download/v${GOGS_VERSION}/linux_amd64.zip" | bsdtar -C /opt -xzf - &&\
+    mkdir -p /opt/gogs/custom &&\
+    mkdir -p /opt/gogs/log &&\
     find /opt/gogs -type d -exec chmod 755 {} \; &&\
     chown -R gogs:gogs /opt/gogs &&\
     chmod u+x /opt/gogs/gogs
