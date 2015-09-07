@@ -1,4 +1,4 @@
-# environment variables for prosody systemd service
+# environment variables for gogs systemd service
 GOGS_TIMEZONE="Europe/Berlin"
 GOGS_IP=127.0.0.1
 GOGS_HTTP=9080
