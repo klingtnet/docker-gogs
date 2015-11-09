@@ -25,7 +25,7 @@ RUN useradd --system --create-home --comment 'gogs - go git service' --shell /bi
     passwd -d gogs
 
 # get the latest linux build (sqlite is not supported in the `go get` version)
-RUN curl -Ls "https://github.com/gogits/gogs/releases/download/v${GOGS_VERSION}/linux_amd64.zip" | bsdtar -C /opt -xzf - &&\
+RUN curl -Ls "https://github.com/gogits/gogs/releases/download/v${GOGS_VERSION}/linux_amd64.tar.gz" | bsdtar -C /opt -xzf - &&\
     mkdir -p /opt/gogs/custom &&\
     mkdir -p /opt/gogs/log &&\
     find /opt/gogs -type d -exec chmod 755 {} \; &&\
