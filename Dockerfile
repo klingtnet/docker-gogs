@@ -44,7 +44,10 @@ ENV USER gogs
 # create the mountable folders before you declare them with the VOLUME statement, otherwise they will be created automatically as root user
 VOLUME /home/gogs
 VOLUME /etc/ssh
+
+ENV GOGS_CUSTOM /opt/gogs/custom
 VOLUME /opt/gogs/custom
+
 VOLUME /opt/gogs/log
 
 WORKDIR /opt/gogs
