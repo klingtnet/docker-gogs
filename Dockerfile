@@ -1,4 +1,4 @@
-FROM golang:latest
+FROM golang:1.7
 MAINTAINER Andreas Linz <klingt.net@gmail.com>
 
 # install non-go dependencies
