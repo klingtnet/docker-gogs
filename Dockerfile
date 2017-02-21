@@ -54,6 +54,5 @@ WORKDIR /opt/gogs
 
 ENV GOGS_TIMEZONE "Europe/Berlin"
 
-CMD echo ${GOGS_TIMEZONE} > /etc/timezone && dpkg-reconfigure -f noninteractive tzdata &&\
-    service ssh start &&\
-    su -s /bin/sh -c '/opt/gogs/gogs web' gogs
+COPY cmd.sh /bin/start-gogs
+CMD start-gogs
