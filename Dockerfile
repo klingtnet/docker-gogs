@@ -17,7 +17,7 @@ RUN echo 'en_US.UTF-8 UTF-8' > /etc/locale.gen &&\
     update-locale LANG='en_US.UTF-8'
 
 ENV LANG 'en_US.UTF-8'
-ENV GOGS_VERSION 0.10.1
+ENV GOGS_VERSION 0.11.4
 
 # create gogs user
 # note: the gogs user must have a login shell, setting it to /usr/bin/nologin or /bin/false will make you unable to push over ssh!
